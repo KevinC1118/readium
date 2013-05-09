@@ -18,7 +18,7 @@ Readium.Models.PackageDocument = Backbone.Model.extend({
 			Readium.FileSystemApi(function(api) {
 				api.getFsUri(that.file_path, function(uri) {
 					that.uri_obj = new URI(uri);
-				})
+				});
 			});
 		}
 		this.on('change:spine_position', this.onSpinePosChanged);

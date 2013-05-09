@@ -1,4 +1,4 @@
-Readium.HttpFileApi = function(initCallback) {
+Readium.HttpFileApi = function(/*initCallback*/) {
     var api = {
         readTextFile: function(path, readCallback, errorCallback) {
             $.ajax({
@@ -11,11 +11,11 @@ Readium.HttpFileApi = function(initCallback) {
                 'error' : function(data, textStatus, jqXHR) {
                     errorCallback(data, textStatus, jqXHR)
                 }
-            })
+            });
         },
 
         getFsUri: function(path, successCallback, errorCallback) {
-            successCallback(document.location.protocol + '//' + document.location.host + path)
+            successCallback(document.location.protocol + '//' + document.location.host + path);
         }
     }
 
