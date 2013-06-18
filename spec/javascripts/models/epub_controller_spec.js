@@ -1,5 +1,4 @@
 (function() {
-
   describe("Readium.Models.EPUBController", function() {
     describe("initialization", function() {
       beforeEach(function() {
@@ -13,6 +12,7 @@
         });
         it("initializes a pagination strategy selector", function() {
           var epub;
+
           epub = new Readium.Models.EPUBController({
             "epub": this.epub
           });
@@ -20,29 +20,27 @@
         });
         it("initializes a reference to the package document", function() {
           var epubController;
+
           epubController = new Readium.Models.EPUBController({
             "epub": this.epub
           });
           return expect(epubController.packageDocument).toBeDefined();
         });
-
         it("calls fetch on the package document", function() {
-          
-            var epub;
-            var epubController;
-            var packageDocument;
+          var epubController, packDoc;
 
-            packageDocument = Factory.spy("package_document");
-            spyOn(Readium.Models, "PackageDocument").andReturn(packageDocument);            
-            epub = new Readium.Models.EPUB({"package_doc_path": "some/file/path"});
-
-            epubController = new Readium.Models.EPUBController({
-                "epub": epub
-            });
-            expect(Readium.Models.PackageDocument).toHaveBeenCalled();
-            return expect(packageDocument.fetch).toHaveBeenCalled();
+          packDoc = new Readium.Models.PackageDocument({
+            book: {},
+            "file_path": "some/path"
+          });
+          spyOn(Readium.Models, "PackageDocument").andReturn(packDoc);
+          spyOn(packDoc, "fetch");
+          epubController = new Readium.Models.EPUBController({
+            "epub": this.epub
+          });
+          expect(Readium.Models.PackageDocument).toHaveBeenCalled();
+          return expect(packDoc.fetch).toHaveBeenCalled();
         });
-
         return describe("sets up event handlers", function() {
           beforeEach(function() {
             this.epub = new Readium.Models.EPUB({
@@ -51,6 +49,13 @@
             return this.epubController = new Readium.Models.EPUBController({
               "epub": this.epub
             });
+          });
+          return it('savePosition and setMetaSize on change:spine_position', function() {
+            spyOn(this.epubController.savePosition, "apply");
+            spyOn(this.epubController.setMetaSize, "apply");
+            this.epubController.trigger("change:spine_position");
+            expect(this.epubController.savePosition.apply).toHaveBeenCalled();
+            return expect(this.epubController.setMetaSize.apply).toHaveBeenCalled();
           });
         });
       });
@@ -86,6 +91,7 @@
       });
       it('does not serialize attributes that should not be presisted', function() {
         var json;
+
         this.epubController.set("rendered_spine_items", [1, 2, 3]);
         this.epubController.set("spine_index", [1]);
         json = this.epubController.toJSON();
@@ -94,6 +100,7 @@
       });
       return it('serializes attributes that should be persisted', function() {
         var json;
+
         this.epubController.set("key", "alksjflkasd");
         this.epubController.set("updated_at", "alksdjfs");
         json = this.epubController.toJSON();

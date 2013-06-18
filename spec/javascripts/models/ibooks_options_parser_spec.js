@@ -1,5 +1,4 @@
 (function() {
-
   describe("Readium.Models.IbookOptionsParser", function() {
     it('exists in the proper namespace', function() {
       return expect(Readium.Models.IbooksOptionsParser).toBeDefined();

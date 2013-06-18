@@ -1,8 +1,8 @@
 (function() {
-
   describe("Readium.Models.PackageDocumentParser", function() {
     beforeEach(function() {
       var uri_object;
+
       this.xml_string = jasmine.getFixtures().read('package_document.xml');
       this.xml = new window.DOMParser().parseFromString(this.xml_string, 'text/xml');
       uri_object = new URI("http://google.com");
@@ -14,11 +14,13 @@
       });
       it('can be initialized', function() {
         var parser;
+
         parser = new Readium.Models.PackageDocumentParser({});
         return expect(typeof parser).toEqual("object");
       });
       return it('assign the parameter as uri_obj', function() {
         var parser;
+
         parser = new Readium.Models.PackageDocumentParser("banana");
         return expect(parser.uri_obj).toEqual("banana");
       });
@@ -26,6 +28,7 @@
     describe("parse", function() {
       it("returns a javascript object", function() {
         var type;
+
         this.result = this.parser.parse(this.xml);
         type = typeof this.result;
         return expect(type).toEqual("object");
@@ -36,38 +39,45 @@
       });
       it('parses the epub version number', function() {
         var res;
+
         res = this.parser.parse(this.xml);
         return expect(res.metadata.epub_version).toEqual("2.0");
       });
       it('parses the identifier', function() {
         var res;
+
         res = this.parser.parse(this.xml);
         return expect(res.metadata.id).toEqual("9782035862464");
       });
       it('parses the title', function() {
         var res;
+
         res = this.parser.parse(this.xml);
         return expect(res.metadata.title).toEqual("L'espagnol dans votre poche");
       });
       it('parses the manifest as a collection', function() {
         var res;
+
         res = this.parser.parse(this.xml);
         return expect(typeof res.manifest.reset).toEqual("function");
       });
       it("parses the bindings", function() {
         var res;
+
         res = this.parser.parse(this.xml);
         expect(res.bindings.length).toEqual(1);
         return expect(res.bindings[0].media_type).toEqual("application/x-epub-figure-gallery");
       });
       it("parses spine item properties", function() {
         var res;
+
         spyOn(this.parser, "parseSpineProperties");
         res = this.parser.parse(this.xml);
         return expect(this.parser.parseSpineProperties).toHaveBeenCalled();
       });
       it("parses the media-overlay attribute", function() {
         var res;
+
         res = this.parser.parse(this.xml);
         expect(res.manifest.at(3).media_overlay === "Page_4_MO");
         return expect(res.manifest.at(4).media_overlay === "");
@@ -77,6 +87,7 @@
       });
       return it("parses the media:active-class metadata", function() {
         var res;
+
         res = this.parser.parse(this.xml);
         return expect(res.metadata.active_class).toEqual("-epub-media-overlay-active");
       });
@@ -111,17 +122,20 @@
     return describe("paginateBackwards()", function() {
       it("returns false the page-progression-direction attr is not present", function() {
         var result;
+
         result = this.parser.paginateBackwards(this.xml);
         return expect(result).toBeFalsy();
       });
       it("returns false if the page-progression-direction attr is ltr", function() {
         var result;
+
         $('spine', this.xml).attr('page-progression-direction', 'rtl');
         result = this.parser.paginateBackwards(this.xml);
         return expect(result).toBeFalsy();
       });
       return it("returns true if the page-progression-direction attr is rtl", function() {
         var result;
+
         $('spine', this.xml).attr('page-progression-direction', 'ltr');
         result = this.parser.paginateBackwards(this.xml);
         return expect(result).toBeTruthy();

@@ -1,5 +1,4 @@
 (function() {
-
   describe("Readium.Models.EPUB", function() {
     describe("initialization", function() {
       beforeEach(function() {
@@ -8,6 +7,7 @@
       describe("without passing a file path", function() {
         return it("throws an exeption", function() {
           var createWithNoPath;
+
           createWithNoPath = function() {
             return new Readium.Models.EPUB();
           };
@@ -17,6 +17,7 @@
       return describe("with valid params", function() {
         it("initializes the package document", function() {
           var epub;
+
           epub = new Readium.Models.EPUB({
             "package_doc_path": "some/file/path"
           });
@@ -24,6 +25,7 @@
         });
         return it('passes a reference to itself to the package document', function() {
           var args, epub, packDoc;
+
           packDoc = new Readium.Models.PackageDocument({
             book: {},
             "file_path": "some/path"
@@ -55,6 +57,7 @@
       });
       return it('does not serialize attributes that should not be persisted', function() {
         var json;
+
         json = this.epub.toJSON();
         expect(json.apple_fixed).not.toBeDefined();
         expect(json.author).not.toBeDefined();

@@ -1,19 +1,21 @@
 (function() {
-
   describe("Readium.Models.SmilModel", function() {
     var smilModel;
+
     smilModel = null;
     beforeEach(function() {
       var audioRender, dom, parser, textRender, xml_string;
+
       audioRender = function() {
-        console.log("Audio media: " + SmilModel.smilNodeToString(this));
+        return console.log("Audio media: " + SmilModel.smilNodeToString(this));
       };
       textRender = function() {
-        console.log("Text media: " + SmilModel.smilNodeToString(this));
+        return console.log("Text media: " + SmilModel.smilNodeToString(this));
       };
       this.addMatchers({
         toBeAnInstanceOf: function(expected) {
           var actual;
+
           actual = this.actual;
           this.message = function() {
             return "Expected " + actual + " to be an instance of " + expected;
@@ -40,26 +42,31 @@
     describe("can find nodes, ", function() {
       it("finds a node by its id", function() {
         var node;
+
         node = smilModel.findNodeByAttrValue("*", "id", "mo1_par1");
         return expect(node.getAttribute("id")).toEqual("mo1_par1");
       });
       it("finds the first node of the given type", function() {
         var node;
+
         node = smilModel.findNodeByAttrValue("par", "", "");
         return expect(node.getAttribute("id")).toEqual("mo1_par1");
       });
       it("finds the first node of the given type with the given attribute", function() {
         var node;
+
         node = smilModel.findNodeByAttrValue("text", "src", "test.xhtml#frag");
         return expect(node.getAttribute("id")).toEqual("testtext1");
       });
       it("finds the first node containing an 'src' attribute", function() {
         var node;
+
         node = smilModel.findNodeByAttrValue("*", "src", "");
         return expect(node.getAttribute("id")).toEqual("mo1_par1_text");
       });
       return it("finds the first node containing an 'epub:textref' attribute", function() {
         var node;
+
         node = smilModel.findNodeByAttrValue("*", "epub:textref", "");
         return expect(node.getAttribute("id")).toEqual("testseq1");
       });
@@ -67,66 +74,79 @@
     return describe("clock value parsing", function() {
       it("parses h:mm:ss.fraction", function() {
         var node;
+
         node = smilModel.findNodeByAttrValue("*", "id", "testaud1");
         return expect(node.getAttribute("clipBegin")).toEqual("20071.396");
       });
       it("parses hhh:mm:ss", function() {
         var node;
+
         node = smilModel.findNodeByAttrValue("*", "id", "testaud1");
         return expect(node.getAttribute("clipEnd")).toEqual("449976");
       });
       it("parses 0:00:ss", function() {
         var node;
+
         node = smilModel.findNodeByAttrValue("*", "id", "testaud2");
         return expect(node.getAttribute("clipBegin")).toEqual("4");
       });
       it("parses 0:mm:ss.fraction", function() {
         var node;
+
         node = smilModel.findNodeByAttrValue("*", "id", "testaud2");
         return expect(node.getAttribute("clipEnd")).toEqual("301.2");
       });
       it("parses 00:ss.fraction", function() {
         var node;
+
         node = smilModel.findNodeByAttrValue("*", "id", "testaud3");
         return expect(node.getAttribute("clipBegin")).toEqual("56.78");
       });
       it("parses mm:ss", function() {
         var node;
+
         node = smilModel.findNodeByAttrValue("*", "id", "testaud3");
         return expect(node.getAttribute("clipEnd")).toEqual("598");
       });
       it("parses min", function() {
         var node;
+
         node = smilModel.findNodeByAttrValue("*", "id", "testaud4");
         return expect(node.getAttribute("clipBegin")).toEqual("780");
       });
       it("parses h", function() {
         var node;
+
         node = smilModel.findNodeByAttrValue("*", "id", "testaud4");
         return expect(node.getAttribute("clipEnd")).toEqual("27900");
       });
       it("parses ms", function() {
         var node;
+
         node = smilModel.findNodeByAttrValue("*", "id", "testaud5");
         return expect(node.getAttribute("clipBegin")).toEqual("2.345");
       });
       it("parses s", function() {
         var node;
+
         node = smilModel.findNodeByAttrValue("*", "id", "testaud5");
         return expect(node.getAttribute("clipEnd")).toEqual("76.2");
       });
       it("parses plain syntax", function() {
         var node;
+
         node = smilModel.findNodeByAttrValue("*", "id", "testaud6");
         return expect(node.getAttribute("clipEnd")).toEqual("12.345");
       });
       it("fills in a missing clipBegin value", function() {
         var node;
+
         node = smilModel.findNodeByAttrValue("*", "id", "testaud7");
         return expect(node.getAttribute("clipBegin")).toEqual("0");
       });
       return it("fills in a missing clipEnd value", function() {
         var node;
+
         node = smilModel.findNodeByAttrValue("*", "id", "testaud7");
         return expect(node.getAttribute("clipEnd")).toEqual("9999999");
       });

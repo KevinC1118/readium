@@ -530,17 +530,18 @@ Readium.Views.ReflowablePaginationView = Readium.Views.PaginationViewBase.extend
         // Get the package document
         // REFACTORING CANDIDATE: This is a temporary approach for retrieving a document representation of the 
         //   package document. Probably best that the package model be able to return this representation of itself.
-        $.ajax({
+        // $.ajax({
 
-            type: "GET",
-            url: this.model.epub.get("root_url"),
-            dataType: "xml",
-            async: false,
-            success: function (response) {
+        //     type: "GET",
+        //     url: this.model.epub.get("package_doc_path"),
+        //     dataType: "xml",
+        //     async: false,
+        //     success: function (response) {
 
-                packageDocument = response;
-            }
-        });
+        //         packageDocument = response;
+        //     }
+        // });
+        packageDocument = this.model.epub.getPackageDocument().get('file_doc');
 
         // Save the position marker
         generatedCFI = EPUBcfi.Generator.generateCharacterOffsetCFI(
